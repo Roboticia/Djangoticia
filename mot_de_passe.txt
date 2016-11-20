@@ -1,0 +1,3 @@
+mot de passe pour l'administrateur django :
+user :  admin
+mot de passe : roboticia

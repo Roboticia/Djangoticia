@@ -1,0 +1,7 @@
+Possibility to start multiple servers
+Remove yaml and request dependencies
+Adaptable for your brand (you can change the logo)
+Start the server only when needed
+2 levels of logs with possibility to disable the server log (for production)
+really close the server (puppet master does only kill parent process)
+

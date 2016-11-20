@@ -1,0 +1,19 @@
+Attempt 1 to start the robot...
+[Error 2] Le fichier spécifié est introuvable
+Attempt 2 to start the robot...
+[Error 2] Le fichier spécifié est introuvable
+Attempt 3 to start the robot...
+[Error 2] Le fichier spécifié est introuvable
+Attempt 4 to start the robot...
+[Error 2] Le fichier spécifié est introuvable
+Attempt 5 to start the robot...
+[Error 2] Le fichier spécifié est introuvable
+Could not start up the robot...
+Traceback (most recent call last):
+  File "c:\python27\scripts\poppy-services-script.py", line 9, in <module>
+    load_entry_point('poppy-creature==1.8.1', 'console_scripts', 'poppy-services')()
+  File "c:\python27\lib\site-packages\poppy_creature-1.8.1-py2.7.egg\poppy\creatures\services_launcher.py", line 179, in main
+    with closing(start_poppy_with_services(args)):
+  File "c:\python27\lib\site-packages\poppy_creature-1.8.1-py2.7.egg\poppy\creatures\services_launcher.py", line 38, in start_poppy_with_services
+    raise exc_inst
+WindowsError: [Error 2] Le fichier spécifié est introuvable
