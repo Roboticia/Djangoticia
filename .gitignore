@@ -1,3 +1,4 @@
+*.log
 *.pyc
 *_no_git_*
 
