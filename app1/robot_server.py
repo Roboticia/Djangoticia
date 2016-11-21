@@ -40,7 +40,7 @@ class Server(object):
                 FNULL = open(os.devnull, 'w')
                 p = Popen(self.get_command(), stdout=FNULL, stderr=STDOUT)
             else :
-                with open(self.daemon.logfile+self.daemon.type+self.robot.creature, 'w') as log:
+                with open(self.daemon.logfile+self.daemon.type+'_'+self.robot.creature+'.log', 'w') as log:
                     p = Popen(self.get_command(), stdout=log, stderr=STDOUT)
             self.daemon.pid = p.pid
             self.daemon.log += (  '{} : Daemon is now running with pid {}<br>'.
