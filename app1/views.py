@@ -19,13 +19,13 @@ def snap(request):
     # Adding new context specific to the view here :
     server_snap.start()
     time.sleep(5)
-    context.update({'iframe_src' : '../static/snap/snap.html#open:http://localhost:6969/snap-blocks.xml' })
+    context.update({'iframe_src' : '/static/snap/snap.html#open:http://localhost:6969/snap-blocks.xml' })
     return render(request, 'app1/base-iframe.html', context)
 
 
 def juju(request):
     
-    context = {'scheme' : request.scheme, 'host' : request.get_host(), 'path' : request.path, 'full' : request.get_full_path(), 'get' : request.GET, 'post' : request.POST, 'configfile' : configfile }
+    context = {'scheme' : request.scheme, 'host' : request.get_host(), 'path' : request.path, 'full' : request.get_full_path(), 'get' : request.GET, 'post' : request.POST }
    
     return render(request, 'app1/juju.html', context)
 
