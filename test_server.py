@@ -5,7 +5,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "projet.settings")
 import django
 django.setup()
 
-from app1.robot_server import Server
+from app1.robot_server import Server, find_local_ip
 
 from app1.models import *
 

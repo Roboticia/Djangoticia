@@ -2,7 +2,7 @@ import os
 import time
 from django.shortcuts import render
 from .models import Info, Robot
-from .robot_server import Server
+from .robot_server import Server, find_local_ip
 
 # Create your views here.
 
@@ -19,7 +19,8 @@ def snap(request):
     # Adding new context specific to the view here :
     server_snap.start()
     time.sleep(5)
-    context.update({'iframe_src' : '/static/snap/snap.html#open:http://localhost:6969/snap-blocks.xml' })
+    iframe_src = '/static/snap/snap.html#open:http://'+find_local_ip()+':6969/snap-blocks.xml'
+    context.update({'iframe_src' : iframe_src })
     return render(request, 'app1/base-iframe.html', context)
 
 
