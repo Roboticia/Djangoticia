@@ -100,7 +100,7 @@ class Server(object):
             p_children = p.children(recursive=True)
             for process in p_children:
                 process.send_signal(signal.SIGTERM)
-                p.send_signal(signal.SIGTERM)
+            p.send_signal(signal.SIGTERM)
             
             time.sleep(1)
             
@@ -122,5 +122,8 @@ class Server(object):
             return False
         
     def state(self):
-        return 'Robot daemon is {}.'.format(
-        'running' if psutil.pid_exists(self.daemon.pid) else'stopped')
+        if psutil.pid_exists(self.daemon.pid):
+            p = psutil.Process(self.daemon.pid)
+            return 'Robot daemon is {}.'.format('running' if not p.status()=='zombie' else'stopped')
+        else :
+            return 'Robot daemon is stopped.'

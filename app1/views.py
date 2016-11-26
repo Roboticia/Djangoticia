@@ -8,7 +8,7 @@ from .robot_server import Server, find_local_ip
 
 # Load the context for all the views here :
 robot = Robot.objects.get(alive=True)
-server_snap = Server('snap',robot, simulator='vrep')
+server_snap = Server('snap',robot)
 context = {'info' : Info.objects.get(), 'robot' : robot ,  'url_for_index' : '/'}
 
 def index(request):
