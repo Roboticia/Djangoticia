@@ -1,13 +1,20 @@
 import os
-import signal
 import psutil
 import time
 import socket
+import requests
 
 from subprocess import Popen, STDOUT
 from .models import Daemon
 
 from django.conf import settings
+
+def check_url(url):
+    try:
+        r = requests.head(url)
+        return True
+    except :
+        return False
 
 def find_local_ip(host=None):
     # see here: http://stackoverflow.com/questions/166506/
@@ -54,6 +61,15 @@ class Server(object):
         self.daemon = Daemon.objects.get(type=type, simulator=simulator )
 
     def get_command(self):
+        if self.daemon.type == 'jupyter':
+            cmd = [
+            'jupyter',
+            'notebook',
+            '--no-browser',
+            '--ip=0.0.0.0',
+            '--notebook-dir={}'.format(settings.PYTHON_ROOT)
+            ]
+            return cmd
         cmd = [
             'poppy-services',
             (self.robot.brand+'-'+self.robot.creature).lower(),
@@ -82,7 +98,7 @@ class Server(object):
                 FNULL = open(os.devnull, 'w')
                 p = Popen(self.get_command(), stdout=FNULL, stderr=STDOUT)
             else :
-                with open(os.path.join(settings.MEDIA_ROOT, self.daemon.logfile+
+                with open(os.path.join(settings.LOG_ROOT, self.daemon.logfile+
                 self.daemon.type+'_'+self.robot.creature+'.log'), 'w') as log:
                     p = Popen(self.get_command(), stdout=log, stderr=STDOUT)
             self.daemon.pid = p.pid
@@ -99,9 +115,11 @@ class Server(object):
                 return
             p_children = p.children(recursive=True)
             for process in p_children:
-                process.send_signal(signal.SIGTERM)
-            p.send_signal(signal.SIGTERM)
-            
+                process.kill()
+            try :
+                p.kill()
+            except psutil.NoSuchProcess:
+                pass
             time.sleep(1)
             
             if 'stopped' in self.state() :

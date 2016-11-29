@@ -125,4 +125,5 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'log')
+LOG_ROOT = os.path.join(BASE_DIR, 'log')
+PYTHON_ROOT = os.path.join(BASE_DIR, 'my_python')
