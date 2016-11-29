@@ -67,7 +67,8 @@ class Server(object):
             'notebook',
             '--no-browser',
             '--ip=0.0.0.0',
-            '--notebook-dir={}'.format(settings.PYTHON_ROOT)
+            '--notebook-dir={}'.format(settings.PYTHON_ROOT),
+            '--config={}'.format(os.path.join(settings.BASE_DIR, 'jupyter','jupyter_notebook_config.py')),
             ]
             return cmd
         cmd = [
