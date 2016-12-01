@@ -1,8 +1,11 @@
 import os
 import time
+import socket
+from wifi import Cell
 from django.shortcuts import render
 from .models import Info, Robot
 from .robot_server import Server, find_local_ip, check_url
+from .wpa_wifi import Network, Fileconf
 
 # Create your views here.
 
@@ -40,6 +43,19 @@ def jupyter(request):
     iframe_src = 'http://{}:8888'.format(find_local_ip())
     context.update({'iframe_src' : iframe_src })
     return render(request, 'app1/base-iframe.html', context)
+    
+    
+def settings(request):
+    try : 
+        wifi = list(Cell.all('wlan0'))
+    except :
+        wifi = False
+        pass
+    # Adding new context specific to the view here :
+    context.update({'ip' : find_local_ip(),'hostname' : socket.gethostname(), 'wifi' : wifi })
+    
+               
+    return render(request, 'app1/settings.html', context)
 
 
 def juju(request):

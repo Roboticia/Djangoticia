@@ -1,0 +1,106 @@
+{% extends "app1/base.html" %}
+
+{% block content %}
+
+<div class="row">
+  <div class="columns">
+    <h1 class="section-title">Configuration</h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="large-12 columns">
+    <div class="callout">
+      <h2>Robot hostname</h2>
+
+      <form>
+        <div class="row">
+          <div class="large-9 columns">
+            <div class="input-group">
+              <input id="robot-hostname" type="text" class="input-group-field" placeholder={{ robot.name }}>
+              <span class="input-group-label">.local</span>
+            </div>
+          </div>
+          <div class="large-3 columns">
+            <button id="update-robot-hostname" type="button" class="button">Update</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="large-12 columns">
+    <div class="callout">
+      <h2>Le robot :</h2>
+      <div class="row">
+        <div class="large-11 columns">
+          <div class="callout primary">
+            <p>Type de créature : {{ robot.brand }}-{{ robot.creature }}</p>
+			<p>Accés réseau : {{hostname}}.local  -  Ce nom peut être changé en passant par Raspiconfig (accés SSH)</p>
+			<p>Adresse IP : {{ip}}</p>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="large-12 columns">
+    <div class="callout">
+      <h2>Le wifi :</h2>
+      <div class="row">
+        <div class="large-6 columns">
+          <div class="callout primary">
+            <p>Réseaux disponible : </p>
+			{% if res %}
+			{% for res in wifi %}
+			<p>SSID : {{wifi.ssid}} -  Force du signal :  {{wifi.quality} - {% if wifi.encrypted %} mot de passe : <input id="psk" type="text" class="input-group-field">{% endif %}  </p>
+			{% endfor %}
+			{% else %}
+			<p>Gestion du wifi non supportée sur la plateforme utilisée</p>
+			{% endif %}
+			
+          </div>
+        </div>
+		
+		<div class="large-6 columns">
+          <div class="callout primary">
+            <p>Réseaux configurés</p>
+			
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+{% endblock content %}
+
+{% block endscript %}
+<script>
+
+$('#camera-switch').change(function() {
+  if ($(this).prop('checked') === true) {
+    $.get('/camera/on');
+  } else {
+    $.get('/camera/off');
+  }
+});
+
+$('#update-robot-hostname').click(function() {
+    newHostname = $('#robot-hostname').val().trim();
+
+    if (newHostname !== '' && newHostname !== '{{ robot.name }}') {
+      $.get('/change_hostname/' + newHostname, function() {
+        window.location.href = 'http://' + newHostname + '.local';
+      });
+    }
+});
+
+</script>
+{% endblock endscript %}
