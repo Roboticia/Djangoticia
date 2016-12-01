@@ -100,5 +100,9 @@ class Fileconf(object):
                 cfile.write(new_config)
         except :
             return "Couldn't write config file"
+            
+            
+            
+
     
 
