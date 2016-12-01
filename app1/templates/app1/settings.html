@@ -55,7 +55,7 @@
         <div class="large-6 columns">
           <div class="callout primary">
             <p>Réseaux disponible : </p>
-			{% if res %}
+			{% if wifi %}
 			{% for res in wifi %}
 			<p>SSID : {{wifi.ssid}} -  Force du signal :  {{wifi.quality} - {% if wifi.encrypted %} mot de passe : <input id="psk" type="text" class="input-group-field">{% endif %}  </p>
 			{% endfor %}
