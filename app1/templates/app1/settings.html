@@ -58,7 +58,7 @@
 			{% if wifi %}
 			{% for res in wifi %}
 			<p>SSID : {{res.ssid}} -  Force du signal :  {{res.quality}} - {% if res.encrypted %} mot de passe : 
-		    <button id="update-robot-hostname" type="button" class="button">Update</button>  </p>
+		    <button id="update-robot-hostname" type="button" class="button">Update</button>{% endif %}  </p>
 			{% endfor %}
 			{% else %}
 			<p>Gestion du wifi non supportée sur la plateforme utilisée</p>
