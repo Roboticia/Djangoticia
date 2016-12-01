@@ -57,7 +57,8 @@
             <p>Réseaux disponible : </p>
 			{% if wifi %}
 			{% for res in wifi %}
-			<p>SSID : {{wifi.ssid}} -  Force du signal :  {{wifi.quality} - {% if wifi.encrypted %} mot de passe : <input id="psk" type="text" class="input-group-field">{% endif %}  </p>
+			<p>SSID : {{res.ssid}} -  Force du signal :  {{res.quality}} - {% if res.encrypted %} mot de passe : 
+		    <button id="update-robot-hostname" type="button" class="button">Update</button>  </p>
 			{% endfor %}
 			{% else %}
 			<p>Gestion du wifi non supportée sur la plateforme utilisée</p>
