@@ -1,6 +1,7 @@
 import os
 import time
 import socket
+import subprocess
 from wifi import Cell
 from django.shortcuts import render
 from .models import Info, Robot
