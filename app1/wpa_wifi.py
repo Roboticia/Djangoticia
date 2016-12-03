@@ -1,3 +1,5 @@
+import re
+
 class Network(object):
 
     """Represents a single network block in wpa_supplicant.conf."""
@@ -82,7 +84,20 @@ class Fileconf(object):
         return cls(head,networks,path)
     
     def add(self, ssid, **opts):
-        self.network_list.append(Networks(ssid, **opts))
+        if re.match("^[a-zA-Z0-9_-]*$", ssid) :
+            self.network_list.append(Network(ssid, **opts))
+            return True
+        else : return False
+        
+    def suppr(self,ssid):
+        index = None
+        for netw in self.network_list:
+            if netw.ssid == ssid : index = self.network_list.index(netw) 
+        if index : 
+            self.network_list.pop(index)
+            return True
+        else : return False
+    
     
     def make_new(self):
         with open(self.path + ".bkp", "w") as bkp_file, open(self.path) as orig_file:
@@ -91,18 +106,15 @@ class Fileconf(object):
         for line in self.head :
             new_config+= line
             new_config+= '\n'
+        new_config+= '\n'
         for net in self.network_list :
-            print(repr(net))
             new_config+=repr(net)
-            new_config+= '\n'
+            new_config+= '\n\n'
+        
         try :
             with open(self.path, "w") as cfile:
                 cfile.write(new_config)
         except :
             return "Couldn't write config file"
-            
-            
-            
-
-    
-
+        
+        return new_config

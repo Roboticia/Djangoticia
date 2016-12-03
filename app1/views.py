@@ -51,8 +51,11 @@ def settings(request):
     except :
         wifi = False
         pass
+    conf = Fileconf.from_file('/etc/wpa_supplicant/wpa_supplicant.conf')
+    connect = subprocess.check_output(['iwgetid', '-r'])
     # Adding new context specific to the view here :
-    context.update({'ip' : find_local_ip(),'hostname' : socket.gethostname(), 'wifi' : wifi })
+    context.update({'ip' : find_local_ip(),'hostname' : socket.gethostname(), 'wifi' : wifi, 'conf' = conf.network_list, 'connect' = connect })
+    
     
                
     return render(request, 'app1/settings.html', context)

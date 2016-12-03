@@ -70,7 +70,16 @@
 		
 		<div class="large-6 columns">
           <div class="callout primary">
-            <p>Réseaux configurés</p>
+            <p>Réseaux configurés : </p>
+			{% if conf %}
+				{% for res in conf %}
+					
+						<p>{{res.ssid}} - Priorité : {{ res.opts['priority'] }}</p>
+					  
+				{% endfor %}
+			{% else %}
+			<p>Gestion du wifi non supportée sur la plateforme utilisée</p>
+			{% endif %}
 			
           </div>
         </div>
