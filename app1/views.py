@@ -49,13 +49,16 @@ def jupyter(request):
 def settings(request):
     try : 
         wifi = list(Cell.all('wlan0'))
+        conf = Fileconf.from_file('/etc/wpa_supplicant/wpa_supplicant.conf')
+        connect = subprocess.check_output(['iwgetid', '-r'])
     except :
-        wifi = False
+        context.update({'ip' : find_local_ip(),'hostname' : socket.gethostname(), 
+        'wifi' : False, 'conf' : False, 'connect' : False })
         pass
-    conf = Fileconf.from_file('/etc/wpa_supplicant/wpa_supplicant.conf')
-    connect = subprocess.check_output(['iwgetid', '-r'])
-    # Adding new context specific to the view here :
-    context.update({'ip' : find_local_ip(),'hostname' : socket.gethostname(), 'wifi' : wifi, 'conf' : conf.network_list, 'connect' : connect })
+    else : 
+        # Adding new context specific to the view here :
+        context.update({'ip' : find_local_ip(),'hostname' : socket.gethostname(), 
+        'wifi' : wifi, 'conf' : conf.network_list, 'connect' : connect })
     
     
                
