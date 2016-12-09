@@ -30,6 +30,20 @@
       </div>
     </nav>
 
+	{% if message %}
+      
+    <div class="row">
+      <div class="flash-message callout {{category}} large-centered large-8 columns" data-closable>
+        <h5>{{ message }}</h5>
+        <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+      
+    {% endif %}
+	
+	
     
 
     {% block content %}{% endblock content %}

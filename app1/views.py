@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
+
 import os
 import time
 import socket
 import subprocess
 from wifi import Cell
 from django.shortcuts import render
+from django.contrib import messages
 from .models import Info, Robot
 from .robot_server import Server, find_local_ip, check_url
 from .wpa_wifi import Network, Fileconf
@@ -19,6 +22,7 @@ context = {'info' : Info.objects.get(), 'robot' : robot ,  'url_for_index' : '/'
 def index(request):
     server_snap.stop()
     server_jupyter.stop()
+    context.update({ 'message' : None})
     return render(request, 'app1/index.html',context)
 
 def snap(request):
@@ -48,12 +52,14 @@ def jupyter(request):
     
 def settings(request):
     try : 
+    # works only on linux system
         wifi = list(Cell.all('wlan0'))
         conf = Fileconf.from_file('/etc/wpa_supplicant/wpa_supplicant.conf')
         connect = subprocess.check_output(['iwgetid', '-r'])
     except :
+    # give fake values on wondows platform
         context.update({'ip' : find_local_ip(),'hostname' : socket.gethostname(), 
-        'wifi' : False, 'conf' : False, 'connect' : False })
+        'wifi' : [{ 'ssid' : 'reseau test' , 'quality' : '0/70' , 'encrypted' : 'sécurisé' },{ 'ssid' : 'reseau test2' , 'quality' : '0/70' , 'encrypted' : 'sécurisé' }],  'conf' : [{'ssid' : 'reseau test', 'opts' : {'priority' : '1'}},{'ssid' : 'reseau test2', 'opts' : {'priority' : '5'}},], 'connect' : 'reseau test' })
         pass
     else : 
         # Adding new context specific to the view here :
@@ -63,16 +69,44 @@ def settings(request):
     
                
     return render(request, 'app1/settings.html', context)
+    
+def change(request):
+    
+    try : 
+    # works only on linux system
+        conf = Fileconf.from_file('/etc/wpa_supplicant/wpa_supplicant.conf')
+    except :
+    # give fake values on wondows platform
+        conf = False
+    try:
+        wifi_ssid=request.POST['wifi_ssid']
+    except (KeyError, Choice.DoesNotExist):
+        # Redisplay the question voting form.
+        context.update({ 'error_msg' : "Vous n'avez pas spécifié de réseau"})
+        return render(request, 'app1/settings.html', context)
+    wifi_psk = request.POST.get('wifi_psk')
+    if wifi_psk is not None : wifi_psk = '"'+wifi_psk+'"'
+    conf.add(wifi_ssid, wifi_psk)
+    if conf.make() :
+        return HttpResponseRedirect('/settings')
+    else :
+        context.update({ 'message' : "Le mot de passe n'est pas valide (au moins 8 caractères uniquement lettres et nombres"})
+        return HttpResponseRedirect('/settings')
+    
+    
 
 
 def juju(request):
     
-    context = {'scheme' : request.scheme, 'host' : request.get_host(), 'path' : request.path, 'full' : request.get_full_path(), 'get' : request.GET, 'post' : request.POST }
+    wifi_ssid = request.POST.get('wifi_ssid',False)    
+    
+    context = {'scheme' : request.scheme, 'host' : request.get_host(), 'path' : request.path, 'full' : request.get_full_path(), 'get' : request.GET, 'post' : request.POST, 'wifi_ssid' : wifi_ssid }
+    context.update({'ip' : find_local_ip(),'hostname' : socket.gethostname(), 'wifi' : [{ 'ssid' : 'reseau test' , 'quality' : '0/70' , 'encrypted' : 'sécurisé' },{ 'ssid' : 'reseau test2' , 'quality' : '0/70' , 'encrypted' : 'sécurisé' }],  'conf' : [{'ssid' : 'reseau test', 'opts' : {'priority' : '1'}},], 'connect' : 'reseau test' })
+    context.update({ 'message' : False})
    
     return render(request, 'app1/juju.html', context)
 
 def juju2(request):
-    
-    context = {'scheme' : request.scheme, 'host' : request.get_host(), 'path' : request.path, 'full' : request.get_full_path(), 'get' : request.GET, 'post' : request.POST, 'configfile' : configfile }
-   
-    return render(request, './static-snap/snap.html', context)
+    messages.warning(request, 'Profile details updated.')
+    context.update({ 'message' : "Le mot de passe n'est pas valide (au moins 8 caractères, uniquement lettres et nombres)", 'category' : 'warning'})
+    return render(request, 'app1/base.html', context)

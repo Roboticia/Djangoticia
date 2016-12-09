@@ -12,4 +12,24 @@ si ceci est un <a href=""> lien </a> alors la page est bien interprétée.
 
 <br>
 
-<iframe src="/static/snap/index.html"></iframe>
+
+
+<form action="/juju/" method="post">
+{% csrf_token %}
+    <label for="your_name">Your name: </label>
+    <input  type="text" name="wifi_ssid" value="">
+    <input type="submit" value="OK">
+	<button type = "submit" id="update-wifi" type="button" class="button">Update</button>
+</form>
+
+la valeur qui vient d'être postée est : {{wifi_ssid}}
+<br>
+{{wifi.ssid}}
+{% for res in wifi %}
+	{% if res.ssid %}
+		<p>{{res.ssid}} -  Force du signal :  {{res.quality}} - {% if res.encrypted %}Sécurisé {% else %} Non sécurisé {% endif %}</p>
+	{% endif %}  
+{% endfor %}
+
+
+
