@@ -87,7 +87,7 @@ def change(request):
         conf.make_new()
         context.update({ 'message' : None})
     else :
-        message = { 'ssid' : 'Le nom de réseau fourni n'est pas valide', 'psk' : 'le mot de passe fourni n'est pas valide'} 
+        message = { 'ssid' : "Le nom de réseau fourni n'est pas valide", 'psk' : "le mot de passe fourni n'est pas valide"} 
         context.update({ 'message' : message[msg], 'category' : 'warning'})
     return HttpResponseRedirect('/settings')
    
