@@ -15,7 +15,7 @@ from .wpa_wifi import Network, Fileconf
 
 # Load the context for all the views here :
 robot = Robot.objects.get(alive=True)
-server_snap = Server('snap',robot)
+server_snap = Server('snap',robot,simulator='vrep')
 server_jupyter = Server('jupyter',robot, simulator='no')
 context = {'info' : Info.objects.get(), 'robot' : robot ,  'url_for_index' : '/'}
 
@@ -78,20 +78,21 @@ def change(request):
     except :
     # give fake values on wondows platform
         conf = False
-    try:
-        wifi_ssid=request.POST['wifi_ssid']
-    except (KeyError, Choice.DoesNotExist):
-        # Redisplay the question voting form.
-        context.update({ 'error_msg' : "Vous n'avez pas spécifié de réseau"})
+    wifi_ssid=request.POST['wifi_ssid']
+    if wifi_ssid == '' : 
+        context.update({ 'message' : "Aucun réseau spécifié"})
         return render(request, 'app1/settings.html', context)
-    wifi_psk = request.POST.get('wifi_psk')
-    if wifi_psk is not None : wifi_psk = '"'+wifi_psk+'"'
-    conf.add(wifi_ssid, wifi_psk)
-    if conf.make() :
-        return HttpResponseRedirect('/settings')
+    opts = {}
+    wifi_psk = request.POST['wifi_psk']
+    if wifi_psk != '' : opts = { 'psk' : '"'+wifi_psk+'"' } 
+    else : opts = {}
+    if conf.add(wifi_ssid, **opts) : 
+        conf.make()
+        context.update({ 'message' : None})
     else :
-        context.update({ 'message' : "Le mot de passe n'est pas valide (au moins 8 caractères uniquement lettres et nombres"})
-        return HttpResponseRedirect('/settings')
+        context.update({ 'message' : "Le mot de passe n'est pas valide (au moins 8 caractères et uniquement lettres et nombres"})
+    return HttpResponseRedirect('/settings')
+   
     
     
 

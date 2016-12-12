@@ -84,7 +84,7 @@ class Fileconf(object):
         return cls(head,networks,path)
     
     def add(self, ssid, **opts):
-        if re.match("^[a-zA-Z0-9_-]*$", ssid) :
+        if re.match("^[a-zA-Z0-9_-]*$", ssid):
             self.network_list.append(Network(ssid, **opts))
             return True
         else : return False
