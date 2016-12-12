@@ -6,7 +6,7 @@ import socket
 import subprocess
 from wifi import Cell
 from django.shortcuts import render
-from django.contrib import messages
+from django.http import HttpResponseRedirect
 from .models import Info, Robot
 from .robot_server import Server, find_local_ip, check_url
 from .wpa_wifi import Network, Fileconf
