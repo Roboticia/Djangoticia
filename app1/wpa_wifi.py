@@ -84,10 +84,12 @@ class Fileconf(object):
         return cls(head,networks,path)
     
     def add(self, ssid, **opts):
-        if re.match("^[a-zA-Z0-9_-]*$", ssid):
-            self.network_list.append(Network(ssid, **opts))
-            return True
-        else : return False
+        if not re.match("^[a-zA-Z0-9_-]+$", ssid): return (False, 'ssid')
+        if 'psk' in opts : 
+            if not re.match('[A-Za-z0-9@#$%^&+=]{8,}', opts['psk']) : return (False, 'psk')
+            else opts['psk'] = '"'+opts['psk']+'"'
+        self.network_list.append(Network(ssid, **opts))
+        return True
         
     def suppr(self,ssid):
         index = None

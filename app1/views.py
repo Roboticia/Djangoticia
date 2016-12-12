@@ -78,19 +78,17 @@ def change(request):
     except :
     # give fake values on wondows platform
         conf = False
-    wifi_ssid=request.POST['wifi_ssid']
-    if wifi_ssid == '' : 
-        context.update({ 'message' : "Aucun réseau spécifié", 'category' : 'warning'})
-        return HttpResponseRedirect('/settings')
-    opts = {}
+    wifi_ssid = request.POST['wifi_ssid']
     wifi_psk = request.POST['wifi_psk']
-    if wifi_psk != '' : opts = { 'psk' : '"'+wifi_psk+'"' } 
-    else : opts = {}
-    if conf.add(wifi_ssid, **opts) : 
+    opts = {}
+    if wifi_psk != '' : opts = { 'psk' : wifi_psk }
+    (res, msg) = conf.add(wifi_ssid, **opts) :  
+    if res :
         conf.make_new()
         context.update({ 'message' : None})
     else :
-        context.update({ 'message' : "Le mot de passe n'est pas valide (au moins 8 caractères et uniquement lettres et nombres", 'category' : 'warning'})
+        message = { 'ssid' : 'Le nom de réseau fourni n'est pas valide', 'psk' : 'le mot de passe fourni n'est pas valide'} 
+        context.update({ 'message' : message[msg], 'category' : 'warning'})
     return HttpResponseRedirect('/settings')
    
     
