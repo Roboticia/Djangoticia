@@ -82,7 +82,7 @@ def change(request):
     wifi_psk = request.POST['wifi_psk']
     opts = {}
     if wifi_psk != '' : opts = { 'psk' : wifi_psk }
-    (res, msg) = conf.add(wifi_ssid, **opts) :  
+    (res, msg) = conf.add(wifi_ssid, **opts)   
     if res :
         conf.make_new()
         context.update({ 'message' : None})
