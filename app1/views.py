@@ -15,7 +15,7 @@ from .wpa_wifi import Network, Fileconf
 
 # Load the context for all the views here :
 robot = Robot.objects.get(alive=True)
-server_snap = Server('snap',robot,simulator='vrep')
+server_snap = Server('snap',robot)
 server_jupyter = Server('jupyter',robot, simulator='no')
 context = {'info' : Info.objects.get(), 'robot' : robot ,  'url_for_index' : '/'}
 
