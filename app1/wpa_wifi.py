@@ -89,7 +89,7 @@ class Fileconf(object):
             if not re.match('[A-Za-z0-9@#$%^&+=]{8,}', opts['psk']) : return (False, 'psk')
             else : opts['psk'] = '"'+opts['psk']+'"'
         self.network_list.append(Network(ssid, **opts))
-        return True
+        return (True, 'ok')
         
     def suppr(self,ssid):
         index = None

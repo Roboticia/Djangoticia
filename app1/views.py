@@ -71,7 +71,6 @@ def settings(request):
     return render(request, 'app1/settings.html', context)
     
 def change(request):
-    
     try : 
     # works only on linux system
         conf = Fileconf.from_file('/etc/wpa_supplicant/wpa_supplicant.conf')
@@ -83,12 +82,9 @@ def change(request):
     opts = {}
     if wifi_psk != '' : opts = { 'psk' : wifi_psk }
     (res, msg) = conf.add(wifi_ssid, **opts)   
-    if res :
-        conf.make_new()
-        context.update({ 'message' : None})
-    else :
-        message = { 'ssid' : "Le nom de réseau fourni n'est pas valide", 'psk' : "le mot de passe fourni n'est pas valide"} 
-        context.update({ 'message' : message[msg], 'category' : 'warning'})
+    if res : conf.make_new()
+    message = { 'ok' : None, 'ssid' : "Le nom de réseau fourni n'est pas valide", 'psk' : "le mot de passe fourni n'est pas valide"} 
+    context.update({ 'message' : message[msg], 'category' : 'warning'})
     return HttpResponseRedirect('/settings')
    
     
