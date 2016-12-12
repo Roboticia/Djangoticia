@@ -80,17 +80,17 @@ def change(request):
         conf = False
     wifi_ssid=request.POST['wifi_ssid']
     if wifi_ssid == '' : 
-        context.update({ 'message' : "Aucun réseau spécifié"})
-        return render(request, 'app1/settings.html', context)
+        context.update({ 'message' : "Aucun réseau spécifié", 'category' : 'warning'})
+        return HttpResponseRedirect('/settings')
     opts = {}
     wifi_psk = request.POST['wifi_psk']
     if wifi_psk != '' : opts = { 'psk' : '"'+wifi_psk+'"' } 
     else : opts = {}
     if conf.add(wifi_ssid, **opts) : 
-        conf.make()
+        conf.make_new()
         context.update({ 'message' : None})
     else :
-        context.update({ 'message' : "Le mot de passe n'est pas valide (au moins 8 caractères et uniquement lettres et nombres"})
+        context.update({ 'message' : "Le mot de passe n'est pas valide (au moins 8 caractères et uniquement lettres et nombres", 'category' : 'warning'})
     return HttpResponseRedirect('/settings')
    
     
