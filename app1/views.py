@@ -102,7 +102,7 @@ def change_suppr(request):
     res = conf.suppr(wifi_ssid)
     if res : conf.make_new()
     message = { True : "Réseaux supprimé" , False : "Impossible de supprimer le réseau"} 
-    context.update({ 'message' : message[res], 'category' : 'info'})
+    context.update({ 'message' : message[res], 'category' : 'success'})
     return HttpResponseRedirect('/settings')
    
     

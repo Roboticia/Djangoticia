@@ -61,7 +61,7 @@
 					<form action="/settings/change_suppr/" method="post">
 			        <input type='hidden' name='wifi_ssid' value='{{res.ssid}}' />
 			       {% csrf_token %}
-						<p>{{res.ssid}} - Priorité : {{ res.opts.priority }}  -   <button type = "submit" id="update-wifi" type="button" class="button tiny">Supprimer</button></p>
+						<p>{{res.ssid}} - {% if res.opts.priority %} Priorité : {{ res.opts.priority }} {% endif %}  -   <button type = "submit" id="update-wifi" type="button" class="button tiny">Supprimer</button></p>
 						
 					</form>
 				
@@ -96,11 +96,11 @@
 				  
 				  <div class="large-4 columns">
 				  <select name="wifi_priority">
-					<option value="1">Aucune</option>
+					<option value="Aucune">Aucune</option>
+					<option value="1">1</option>
 					<option value="2">2</option>
 					<option value="3">3</option>
 					<option value="4">4</option>
-					<option value="5">5</option>
 				  </select>
 				  </div>
 				  
