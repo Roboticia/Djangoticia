@@ -80,7 +80,7 @@ def change_add(request):
         return HttpResponseRedirect('/settings')
     wifi_ssid = request.POST['wifi_ssid']
     wifi_psk = request.POST['wifi_psk']
-    wifi_priority = request.POST['priority']
+    wifi_priority = request.POST['wifi_priority']
     opts = {}
     if wifi_psk != '' : opts = { 'psk' : wifi_psk, 'priority' : wifi_priority }
     (res, msg) = conf.add(wifi_ssid, **opts)   
