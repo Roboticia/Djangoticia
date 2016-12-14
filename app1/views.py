@@ -70,21 +70,38 @@ def settings(request):
                
     return render(request, 'app1/settings.html', context)
     
-def change(request):
+def change_add(request):
     try : 
     # works only on linux system
         conf = Fileconf.from_file('/etc/wpa_supplicant/wpa_supplicant.conf')
     except :
     # give fake values on wondows platform
-        conf = False
+        pass
+        return HttpResponseRedirect('/settings')
     wifi_ssid = request.POST['wifi_ssid']
     wifi_psk = request.POST['wifi_psk']
+    wifi_priority = request.POST['priority']
     opts = {}
-    if wifi_psk != '' : opts = { 'psk' : wifi_psk }
+    if wifi_psk != '' : opts = { 'psk' : wifi_psk, 'priority' : wifi_priority }
     (res, msg) = conf.add(wifi_ssid, **opts)   
     if res : conf.make_new()
     message = { 'ok' : None, 'ssid' : "Le nom de réseau fourni n'est pas valide", 'psk' : "le mot de passe fourni n'est pas valide"} 
     context.update({ 'message' : message[msg], 'category' : 'warning'})
+    return HttpResponseRedirect('/settings')
+    
+def change_suppr(request):
+    try : 
+    # works only on linux system
+        conf = Fileconf.from_file('/etc/wpa_supplicant/wpa_supplicant.conf')
+    except :
+    # give fake values on wondows platform
+        pass
+        return HttpResponseRedirect('/settings')
+    wifi_ssid = request.POST['wifi_ssid']
+    res = conf.suppr(wifi_ssid)
+    if res : conf.make_new()
+    message = { True : "Réseaux supprimé" , False : "Impossible de supprimer le réseau"} 
+    context.update({ 'message' : message[res], 'category' : 'info'})
     return HttpResponseRedirect('/settings')
    
     

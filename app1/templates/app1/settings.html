@@ -58,9 +58,8 @@
 			{% if conf %}
 				{% for res in conf %}
 				
-					<form action="/settings/change/" method="post">
-			        <input type='hidden' name='method' value='suppr' />
-					<input type='hidden' name='wifi_ssid' value='{{res.ssid}}' />
+					<form action="/settings/change_suppr/" method="post">
+			        <input type='hidden' name='wifi_ssid' value='{{res.ssid}}' />
 			       {% csrf_token %}
 						<p>{{res.ssid}} - Priorité : {{ res.opts.priority }}  -   <button type = "submit" id="update-wifi" type="button" class="button tiny">Supprimer</button></p>
 						
@@ -70,8 +69,8 @@
 				</div>
 		   <div class="callout primary">
 		   <p>Ajouter un réseau wifi : </p>
-			  <form action="/settings/change/" method="post">
-			  <input type='hidden' name='method' value='add' />
+			  <form action="/settings/change_add/" method="post">
+			  
 			  {% csrf_token %}
 				<div class="row">
 				  <div class="large-4 columns">
@@ -83,17 +82,40 @@
 				  </div>
 				  <div class="row">
 				   <div class="large-4 columns">
-					<label for="psk">Mot de passe: </label>
+					<label for="psk">Mot de passe : </label>
 				  </div>
 				  <div class="large-8 columns">
 					<input id="wifi_psk" name = "wifi_psk" type="text" class="input-group-field" >
 				  </div>
 				  </div>
-				   <div class="row">
+				  <p></p>
+				  <div class="row">
+				  <div class="large-2 columns">
+				  <label>Priorité : </label>
+				  </div>
+				  
 				  <div class="large-4 columns">
-					<button type = "submit" id="update-wifi" type="button" class="button">Envoyer</button>
+				  <select name="wifi_priority">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+				  </select>
 				  </div>
+				  
+				  
+				  
+				  <div class="large-4 columns">
+				  <button type = "submit" id="update-wifi" type="button" class="button">Envoyer</button>
+					</label>
 				  </div>
+				  
+				  </div>
+				  
+				  
+				  
+				   
 				   
 			  </form>
 			  </div>

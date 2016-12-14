@@ -94,10 +94,10 @@ class Fileconf(object):
     def suppr(self,ssid):
         index = None
         for netw in self.network_list:
-            if netw.ssid == ssid : index = self.network_list.index(netw) 
-        if index : 
-            self.network_list.pop(index)
-            return True
+            if netw.ssid == ssid : 
+                index = self.network_list.index(netw)
+                self.network_list.pop(index) 
+        if index : return True
         else : return False
     
     

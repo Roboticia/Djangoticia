@@ -18,7 +18,7 @@
     <nav class="top-bar" role="navigation">
       <div class="top-bar-title">
         <a href="{{ url_for_index }}">
-          <img width="100" height="38" data-interchange="[{%  static "/app1/img/logo-large.png" %} , retina]" src="{%  static "/app1/img/logo.png" %}" alt="Roboticia">
+          <img width="100" height="38" data-interchange="[{% get_static_prefix %}app1/img/{{ robot.brand }}/logo-large.png , retina]" src="{% get_static_prefix %}app1/img/{{ robot.brand }}/logo.png" alt="{{ robot.brand }}">
         </a>
       </div>
       <div class="top-bar-right">
