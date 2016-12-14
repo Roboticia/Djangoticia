@@ -82,7 +82,8 @@ def change_add(request):
     wifi_psk = request.POST['wifi_psk']
     wifi_priority = request.POST['wifi_priority']
     opts = {}
-    if wifi_psk != '' : opts = { 'psk' : wifi_psk, 'priority' : wifi_priority }
+    if wifi_psk != '' : opts = { 'psk' : wifi_psk, }
+    if wifi_priority != 'Aucune' : opts.update({'priority' : wifi_priority})
     (res, msg) = conf.add(wifi_ssid, **opts)   
     if res : conf.make_new()
     message = { 'ok' : None, 'ssid' : "Le nom de réseau fourni n'est pas valide", 'psk' : "le mot de passe fourni n'est pas valide"} 
