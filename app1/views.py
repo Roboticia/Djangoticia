@@ -29,7 +29,7 @@ def snap(request):
     # Adding new context specific to the view here :
     server_jupyter.stop()
     server_snap.start()
-    for i in range(5):
+    for i in range(10):
         if check_url('http://localhost:6969') : 
             break
         time.sleep(1)
@@ -70,7 +70,7 @@ def settings(request):
                
     return render(request, 'app1/settings.html', context)
     
-def change_add(request):
+def wifi_add(request):
     try : 
     # works only on linux system
         conf = Fileconf.from_file('/etc/wpa_supplicant/wpa_supplicant.conf')
@@ -90,7 +90,7 @@ def change_add(request):
     context.update({ 'message' : message[msg], 'category' : 'warning'})
     return HttpResponseRedirect('/settings')
     
-def change_suppr(request):
+def wifi_suppr(request):
     try : 
     # works only on linux system
         conf = Fileconf.from_file('/etc/wpa_supplicant/wpa_supplicant.conf')
@@ -105,7 +105,8 @@ def change_suppr(request):
     context.update({ 'message' : message[res], 'category' : 'success'})
     return HttpResponseRedirect('/settings')
    
-    
+def wifi_restart(request):
+        
     
 
 
