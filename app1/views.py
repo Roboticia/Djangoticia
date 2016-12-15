@@ -54,8 +54,8 @@ def jupyter(request):
     return render(request, 'app1/base-iframe.html', context)
     
 def rest(request):
-    rest = request.POST.get('rest',False)
-    if rest=='stop': server_rest.stop()
+    rest_action = request.POST.get('rest_action',False)
+    if rest_action=='stop': server_rest.stop()
     else : server_rest.start()
     context.update({ 'logs_rest' : '/rest/raw/', 'url_rest' : '/rest/state/'})
     return render(request, 'app1/rest.html', context)
