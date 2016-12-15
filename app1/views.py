@@ -106,14 +106,21 @@ def wifi_suppr(request):
     return HttpResponseRedirect('/settings')
    
 def wifi_restart(request):
-        
+    try : 
+        subprocess.call(['sudo', 'ifdown', 'wlan0'])
+        time.sleep(1)
+        subprocess.call(['sudo', 'ifup', 'wlan0'])
+    except :
+    # give fake values on wondows platform
+        pass
+        return HttpResponseRedirect('/settings')
+    context.update({ 'message' : 'Wifi redémarré avec succés', 'category' : 'success'})
+    return HttpResponseRedirect('/settings')    
     
 
 
 def juju(request):
-    
     wifi_ssid = request.POST.get('wifi_ssid',False)    
-    
     context = {'scheme' : request.scheme, 'host' : request.get_host(), 'path' : request.path, 'full' : request.get_full_path(), 'get' : request.GET, 'post' : request.POST, 'wifi_ssid' : wifi_ssid }
     context.update({'ip' : find_local_ip(),'hostname' : socket.gethostname(), 'wifi' : [{ 'ssid' : 'reseau test' , 'quality' : '0/70' , 'encrypted' : 'sécurisé' },{ 'ssid' : 'reseau test2' , 'quality' : '0/70' , 'encrypted' : 'sécurisé' }],  'conf' : [{'ssid' : 'reseau test', 'opts' : {'priority' : '1'}},], 'connect' : 'reseau test' })
     context.update({ 'message' : False})
