@@ -54,6 +54,24 @@ def find_local_ip(host=None):
         else:
             raise
     return '127.0.0.1'
+    
+def robot_logs(robot):
+    raw = ''
+    daemon_list = Daemon.objects.exclude(pid=-1)
+    for daemon in daemon_list :
+        raw += '<p>Logs actifs pour : '+str(daemon)+'</p>'
+        raw += '<p>'+daemon.log+'</p>'
+        if daemon.logfile!='none':
+            with open(os.path.join(settings.LOG_ROOT, daemon.logfile+
+            daemon.type+'_'+robot.creature+'.log'), 'r') as log:
+                u = log.readlines()
+            raw += '<p>Details : </p>'
+            for l in u : 
+                try : 
+                    raw += l+'<br>'
+                except UnicodeDecodeError:
+                    pass
+    return raw
 
 class Server(object):
     def __init__(self, type, robot, simulator='no'):

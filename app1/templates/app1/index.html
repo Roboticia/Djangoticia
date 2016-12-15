@@ -38,7 +38,7 @@
       </div>
       <div class="top-bar-right">
         <ul class="menu">
-		  <li><a href="http://docs.poppy-project.org/en/" target="_new">Logs</a></li>
+		  <li><a href="/logs">Logs</a></li>
           <li><a href="http://docs.poppy-project.org/en/" target="_blank">Docs</a></li>
           <li><span class="version">v{{ info.version}}</span></li>
         </ul>
@@ -80,6 +80,15 @@
       <p>Python, Terminal</p>
     </a>
   </div>
+  
+  <div class="large-4 medium-6 columns menu-tile">
+    <a href="/rest" data-equalizer-watch>
+      <h3>
+        <img width="110" height="62" src="{% static "app1/img/logo-rest.png" %}" data-interchange="[{% static "app1/img/logo-rest-large.png" %}, retina]" src="{% static "app1/img/logo.png" %}" alt="Rest">
+      </h3>
+      <p>REST, Api</p>
+    </a>
+  </div>
 
   <div class="large-4 medium-6 columns menu-tile">
     <a href="/settings" data-equalizer-watch>
@@ -94,7 +103,7 @@
   </div>
 
   <div class="large-4 medium-6 columns menu-tile">
-    <a href="/reset" data-equalizer-watch>
+    <a href="/reboot" data-equalizer-watch>
       <h3>
         <svg class="pp-icon pp-icon-sync">
           <title>Restart</title>

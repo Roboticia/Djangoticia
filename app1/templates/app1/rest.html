@@ -1,0 +1,78 @@
+{% extends "app1/base.html" %}
+
+{% block content %}
+
+<div class="row">
+  <div class="columns">
+    <h1 class="section-title">REST</h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="large-12 columns">
+    <h3> Etat du serveur :  </h3>
+	
+	<div class="row">
+	<div class="large-9 columns">
+	<code id="robot-state" class="accesslog hljs"></code>
+	</div>
+	<div class="large-3 columns">
+	<form action="/rest/" method="post"><input type='hidden' name='rest' value='stop' />{% csrf_token %}
+	<button type = "submit" id="stop-rest" type="button" class="button">Stopper le serveur</button>
+	</form>
+	</div>
+	</div>
+	
+	
+	
+	
+	
+	
+		
+	
+  </div>
+</div>
+
+<div class="row">
+  <div class="large-12 columns">
+  <h3> Détail des logs : </h3>
+    <pre>
+      <code id="robot-logs" class="accesslog hljs"></code>
+    </pre>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block endscript %}
+<script>
+
+var timeOut;
+
+function refreshLogs() {
+  $.get('{{logs_rest}}', function(rawLogs) {
+    var logsElement = document.getElementById('robot-logs');
+
+    logsElement.innerHTML = rawLogs;
+    hljs.highlightBlock(logsElement);
+
+    startTimeout();
+  });
+  $.get('{{url_rest}}', function(rawLogs2) {
+    var stateElement = document.getElementById('robot-state');
+
+    stateElement.innerHTML = rawLogs2;
+    hljs.highlightBlock(stateElement);
+
+    startTimeout();
+  });
+}
+
+function startTimeout() {
+  timeOut = window.setTimeout(refreshLogs, 1000);
+}
+
+startTimeout();
+
+</script>
+{% endblock endscript %}

@@ -6,9 +6,10 @@ import socket
 import subprocess
 from wifi import Cell
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.conf import settings
 from .models import Info, Robot
-from .robot_server import Server, find_local_ip, check_url
+from .robot_server import Server, find_local_ip, check_url, robot_logs
 from .wpa_wifi import Network, Fileconf
 
 # Create your views here.
@@ -17,11 +18,14 @@ from .wpa_wifi import Network, Fileconf
 robot = Robot.objects.get(alive=True)
 server_snap = Server('snap',robot)
 server_jupyter = Server('jupyter',robot, simulator='no')
+server_rest = Server('http',robot)
 context = {'info' : Info.objects.get(), 'robot' : robot ,  'url_for_index' : '/'}
+base_context = context
 
 def index(request):
     server_snap.stop()
     server_jupyter.stop()
+    context = base_context
     context.update({ 'message' : None})
     return render(request, 'app1/index.html',context)
 
@@ -49,8 +53,33 @@ def jupyter(request):
     context.update({'iframe_src' : iframe_src })
     return render(request, 'app1/base-iframe.html', context)
     
+def rest(request):
+    rest = request.POST.get('rest',False)
+    if rest=='stop': server_rest.stop()
+    else : server_rest.start()
+    context.update({ 'logs_rest' : '/rest/raw/', 'url_rest' : '/rest/state/'})
+    return render(request, 'app1/rest.html', context)
     
-def settings(request):
+def rest_state(request):
+    return HttpResponse(server_rest.state())
+    
+def rest_raw(request):
+    raw=''
+    if server_rest.daemon.pid==-1 : return HttpResponse(raw)
+    with open(os.path.join(settings.LOG_ROOT, server_rest.daemon.logfile+
+    server_rest.daemon.type+'_'+robot.creature+'.log'), 'r') as log:
+        u = log.readlines()
+    for l in u : 
+        try : 
+            raw += l+'<br>'
+        except UnicodeDecodeError:
+            pass
+    return HttpResponse(raw)
+    
+    
+    
+    
+def configuration(request):
     try : 
     # works only on linux system
         wifi = list(Cell.all('wlan0'))
@@ -65,9 +94,6 @@ def settings(request):
         # Adding new context specific to the view here :
         context.update({'ip' : find_local_ip(),'hostname' : socket.gethostname(), 
         'wifi' : wifi, 'conf' : conf.network_list, 'connect' : connect })
-    
-    
-               
     return render(request, 'app1/settings.html', context)
     
 def wifi_add(request):
@@ -107,16 +133,46 @@ def wifi_suppr(request):
    
 def wifi_restart(request):
     try : 
-        subprocess.call(['sudo', 'ifdown', 'wlan0'])
+        res1 = subprocess.call(['sudo', 'ifdown', 'wlan0'])
         time.sleep(1)
-        subprocess.call(['sudo', 'ifup', 'wlan0'])
+        res2 = subprocess.call(['sudo', 'ifup', 'wlan0'])
     except :
-    # give fake values on wondows platform
+    # return on fail (windows)
         pass
         return HttpResponseRedirect('/settings')
-    context.update({ 'message' : 'Wifi redémarré avec succés', 'category' : 'success'})
-    return HttpResponseRedirect('/settings')    
+    if res1 == 0 and res2 == 0 : context.update({ 'message' : 'Wifi redémarré avec succés', 'category' : 'success'})
+    else :  context.update({ 'message' : 'Impossible de redémarré le wifi', 'category' : 'warning'})
+    return HttpResponseRedirect('/settings')   
     
+def logs(request):
+    snap = server_snap.state() 
+    jupyter = server_jupyter.state()
+    rest = server_rest.state() 
+    context.update({'url_logs' : '/logs/raw/', 'snap' : snap, 'jupyter' : jupyter, 'rest' : rest}) 
+    return render(request, 'app1/logs.html', context)
+     
+def rawlogs(request):
+    raw = robot_logs(robot)
+    return HttpResponse(raw)
+            
+    
+    
+    
+def reboot(request):
+    try : 
+        subprocess.call(['sudo', 'reboot'])
+    except :
+    # return on fail (windows)
+        pass
+    return HttpResponseRedirect('/')    
+    
+def shutdown(request):
+    try : 
+        subprocess.call(['sudo', 'halt'])
+    except :
+    # return on fail (windows)
+        pass
+    return HttpResponseRedirect('/')    
 
 
 def juju(request):
