@@ -18,14 +18,16 @@ from .wpa_wifi import Network, Fileconf
 robot = Robot.objects.get(alive=True)
 server_snap = Server('snap',robot)
 server_jupyter = Server('jupyter',robot, simulator='no')
-server_rest = Server('http',robot)
+server_rest = Server('http',robot,simulator='vrep')
 context = {'info' : Info.objects.get(), 'robot' : robot ,  'url_for_index' : '/'}
-base_context = context
 
 def index(request):
+    rest = request.GET.get('rest',False)
+    if rest=='stop' : 
+        server_rest.stop()
+        context.update({ 'url_for_index' :  '/'})
     server_snap.stop()
     server_jupyter.stop()
-    context = base_context
     context.update({ 'message' : None})
     return render(request, 'app1/index.html',context)
 
@@ -45,12 +47,22 @@ def jupyter(request):
     # Adding new context specific to the view here :
     server_snap.stop()
     server_jupyter.start()
-    for i in range(5):
+    for i in range(10):
         if check_url('http://localhost:8888') : 
             break
         time.sleep(1)
     iframe_src = 'http://{}:8888'.format(find_local_ip())
     context.update({'iframe_src' : iframe_src })
+    return render(request, 'app1/base-iframe.html', context)
+    
+def monitor(request):
+    server_rest.start()
+    for i in range(10):
+        if check_url('http://localhost:8080') : 
+            break
+        time.sleep(1)
+    iframe_src = '/static/monitor/'+robot.brand.lower()+'-'+robot.creature.lower()+'.html'
+    context.update({'iframe_src' : iframe_src, 'url_for_index' : '/?rest=stop' })
     return render(request, 'app1/base-iframe.html', context)
     
 def rest(request):
@@ -88,7 +100,7 @@ def configuration(request):
     except :
     # give fake values on wondows platform
         context.update({'ip' : find_local_ip(),'hostname' : socket.gethostname(), 
-        'wifi' : [{ 'ssid' : 'reseau test' , 'quality' : '0/70' , 'encrypted' : 'sécurisé' },{ 'ssid' : 'reseau test2' , 'quality' : '0/70' , 'encrypted' : 'sécurisé' }],  'conf' : [{'ssid' : 'reseau test', 'opts' : {'priority' : '1'}},{'ssid' : 'reseau test2', 'opts' : {'priority' : '5'}},], 'connect' : 'reseau test' })
+        'wifi' : [{ 'ssid' : 'test network' , 'quality' : '0/70' , 'encrypted' : 'secure' },{ 'ssid' : 'reseau test2' , 'quality' : '0/70' , 'encrypted' : 'secure' }],  'conf' : [{'ssid' : 'reseau test', 'opts' : {'priority' : '1'}},{'ssid' : 'reseau test2', 'opts' : {'priority' : '5'}},], 'connect' : 'reseau test' })
         pass
     else : 
         # Adding new context specific to the view here :
@@ -112,7 +124,7 @@ def wifi_add(request):
     if wifi_priority != 'Aucune' : opts.update({'priority' : wifi_priority})
     (res, msg) = conf.add(wifi_ssid, **opts)   
     if res : conf.make_new()
-    message = { 'ok' : None, 'ssid' : "Le nom de réseau fourni n'est pas valide", 'psk' : "le mot de passe fourni n'est pas valide"} 
+    message = { 'ok' : None, 'ssid' : "Wrong network name !", 'psk' : "Wrong password !"} 
     context.update({ 'message' : message[msg], 'category' : 'warning'})
     return HttpResponseRedirect('/settings')
     
@@ -127,7 +139,7 @@ def wifi_suppr(request):
     wifi_ssid = request.POST['wifi_ssid']
     res = conf.suppr(wifi_ssid)
     if res : conf.make_new()
-    message = { True : "Réseaux supprimé" , False : "Impossible de supprimer le réseau"} 
+    message = { True : "Network deleted" , False : "Can't suppress the network !"} 
     context.update({ 'message' : message[res], 'category' : 'success'})
     return HttpResponseRedirect('/settings')
    
@@ -140,8 +152,8 @@ def wifi_restart(request):
     # return on fail (windows)
         pass
         return HttpResponseRedirect('/settings')
-    if res1 == 0 and res2 == 0 : context.update({ 'message' : 'Wifi redémarré avec succés', 'category' : 'success'})
-    else :  context.update({ 'message' : 'Impossible de redémarré le wifi', 'category' : 'warning'})
+    if res1 == 0 and res2 == 0 : context.update({ 'message' : 'Wifi restarted', 'category' : 'success'})
+    else :  context.update({ 'message' : 'Unable to restart wifi', 'category' : 'warning'})
     return HttpResponseRedirect('/settings')   
     
 def logs(request):
@@ -177,13 +189,20 @@ def shutdown(request):
 
 def juju(request):
     wifi_ssid = request.POST.get('wifi_ssid',False)    
-    context = {'scheme' : request.scheme, 'host' : request.get_host(), 'path' : request.path, 'full' : request.get_full_path(), 'get' : request.GET, 'post' : request.POST, 'wifi_ssid' : wifi_ssid }
+    context2 = {'scheme' : request.scheme, 'host' : request.get_host(), 'path' : request.path, 'full' : request.get_full_path(), 'get' : request.GET, 'post' : request.POST, 'wifi_ssid' : wifi_ssid }
     context.update({'ip' : find_local_ip(),'hostname' : socket.gethostname(), 'wifi' : [{ 'ssid' : 'reseau test' , 'quality' : '0/70' , 'encrypted' : 'sécurisé' },{ 'ssid' : 'reseau test2' , 'quality' : '0/70' , 'encrypted' : 'sécurisé' }],  'conf' : [{'ssid' : 'reseau test', 'opts' : {'priority' : '1'}},], 'connect' : 'reseau test' })
     context.update({ 'message' : False})
-   
-    return render(request, 'app1/juju.html', context)
+    server_rest.start()
+    test=''
+    for i in range(100):
+        test+=server_rest.state()
+        time.sleep(0.1)
+    context.update({ 'test' : test})
+    return render(request, 'app1/juju.html', context2)
 
 def juju2(request):
-    messages.warning(request, 'Profile details updated.')
-    context.update({ 'message' : "Le mot de passe n'est pas valide (au moins 8 caractères, uniquement lettres et nombres)", 'category' : 'warning'})
-    return render(request, 'app1/base.html', context)
+    rest = request.GET.get('rest','rien')
+    
+    context2 = {'scheme' : request.scheme, 'host' : request.get_host(), 'path' : request.path, 'full' : request.get_full_path(), 'get' : request.GET, 'post' : request.POST,'rest' : rest }
+    
+    return render(request, 'app1/juju.html', context2)

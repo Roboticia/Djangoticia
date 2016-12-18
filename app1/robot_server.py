@@ -57,9 +57,11 @@ def find_local_ip(host=None):
     
 def robot_logs(robot):
     raw = ''
+    ligne = False
     daemon_list = Daemon.objects.exclude(pid=-1)
     for daemon in daemon_list :
-        raw += '<p>Logs actifs pour : '+str(daemon)+'</p>'
+        if ligne : raw+='<hr style="width:100%; height:2px;" />'
+        raw += ' <p>Logs running for : '+str(daemon)+'</p>'
         raw += '<p>'+daemon.log+'</p>'
         if daemon.logfile!='none':
             with open(os.path.join(settings.LOG_ROOT, daemon.logfile+
@@ -71,6 +73,7 @@ def robot_logs(robot):
                     raw += l+'<br>'
                 except UnicodeDecodeError:
                     pass
+        ligne = True
     return raw
 
 class Server(object):
@@ -141,7 +144,7 @@ class Server(object):
                 pass
             time.sleep(1)
             
-            if 'stopped' in self.state() :
+            if 'stopped' in self.state() and not check_url('http://localhost:8888') :
                 self.daemon.pid = -1
                 self.daemon.log = ''
                 self.daemon.save()

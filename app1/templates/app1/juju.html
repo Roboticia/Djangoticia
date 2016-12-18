@@ -29,7 +29,7 @@ si ceci est un <a href=""> lien </a> alors la page est bien interprétée.
 	<button type = "submit" id="update-wifi" type="button" class="button">Update</button>
 </form>
 
-la valeur qui vient d'être postée est : {{wifi_ssid}}
+la valeur qui vient d'être postée est : {{rest}}
 <br>
 {{wifi.ssid}}
 {% for res in wifi %}
@@ -37,6 +37,13 @@ la valeur qui vient d'être postée est : {{wifi_ssid}}
 		<p>{{res.ssid}} -  Force du signal :  {{res.quality}} - {% if res.encrypted %}Sécurisé {% else %} Non sécurisé {% endif %}</p>
 	{% endif %}  
 {% endfor %}
+
+<br>
+<br>
+<br>
+{% csrf_token %}
+<br>
+{{test}}
 
 
 

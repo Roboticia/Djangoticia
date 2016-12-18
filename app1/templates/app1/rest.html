@@ -56,7 +56,7 @@ function refreshLogs() {
     logsElement.innerHTML = rawLogs;
     hljs.highlightBlock(logsElement);
 
-    startTimeout();
+    
   });
   $.get('{{url_rest}}', function(rawLogs2) {
     var stateElement = document.getElementById('robot-state');

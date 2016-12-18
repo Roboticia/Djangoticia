@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
 	url(r'^snap/', views.snap, name='snap'),
 	url(r'^jupyter/', views.jupyter, name='jupyter'),
+	url(r'^monitor/', views.monitor, name='monitor'),
 	url(r'^rest/$', views.rest, name='rest'),
 	url(r'^rest/raw/$', views.rest_raw, name='rest'),
 	url(r'^rest/state/$', views.rest_state, name='rest'),
