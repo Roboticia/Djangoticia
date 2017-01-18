@@ -18,7 +18,7 @@ from .wpa_wifi import Network, Fileconf
 robot = Robot.objects.get(alive=True)
 server_snap = Server('snap',robot)
 server_jupyter = Server('jupyter',robot, simulator='no')
-server_rest = Server('http',robot,simulator='vrep')
+server_rest = Server('http',robot,simulator='no')
 context = {'info' : Info.objects.get(), 'robot' : robot ,  'url_for_index' : '/'}
 
 def index(request):
