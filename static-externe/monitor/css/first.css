@@ -164,7 +164,7 @@ transform:scale(3) rotate(-90deg) translate(-10px,-10px);
 .poppy_picture{
   width:600px;
   height:650px;
-  background:transparent url(../img/ergo-jr.png) center center no-repeat;
+  background:transparent url(../img/first.png) center center no-repeat;
   background-size:contain;
 }
 
@@ -200,6 +200,6 @@ li.motor.ardent {
   0% { box-shadow: 0 0 5px #600 ; }
   100% { box-shadow: 0 0 15px #600 ; }
 }
-#motor_m3{top:200px; left:450px;}
-#motor_m2{top:325px; left:450px;}
-#motor_m1{top:450px; left:450px;}
+#motor_m3{top:180px; left:410px;}
+#motor_m2{top:220px; left:72px;}
+#motor_m1{top:350px; left:50px;}
