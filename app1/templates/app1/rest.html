@@ -50,26 +50,31 @@
 var timeOut;
 
 function refreshLogs() {
-  $.get('{{logs_rest}}', function(rawLogs) {
-    var logsElement = document.getElementById('robot-logs');
-
-    logsElement.innerHTML = rawLogs;
-    hljs.highlightBlock(logsElement);
-
-    
-  });
   $.get('{{url_rest}}', function(rawLogs2) {
     var stateElement = document.getElementById('robot-state');
 
     stateElement.innerHTML = rawLogs2;
-    hljs.highlightBlock(stateElement);
-
-    startTimeout();
+    hljs.highlightBlock(stateElement);  
   });
+  startTimeout2();
+}
+
+function refreshLogs2() {
+  $.get('{{logs_rest}}', function(rawLogs) {
+    var logsElement = document.getElementById('robot-logs');
+
+    logsElement.innerHTML = rawLogs;
+    hljs.highlightBlock(logsElement);    
+  });
+  startTimeout();
 }
 
 function startTimeout() {
   timeOut = window.setTimeout(refreshLogs, 2000);
+}
+
+function startTimeout2() {
+  timeOut = window.setTimeout(refreshLogs2, 1000);
 }
 
 startTimeout();
