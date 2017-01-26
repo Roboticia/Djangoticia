@@ -1,14 +1,14 @@
 # Djangoticia: a Control Web Interface for Roboticia and Poppy robots. Based on Django.
 
-**Warning: Djangoticia is mainly intended to work on a Raspberry-Pi [correctly setup](http://www.roboticia.com/?page_id=258) to work with Roboticia robots. Because Roboticia robots are Poppy compatible, it could also works with Poppy robots.
-Anyway, Djangoticia can work (without all functionalities) on other systems like windows. It can also drive simulated robots on VREP.**
+**Warning: Djangoticia is mainly intended to work on a Raspberry-Pi to work with Roboticia robots. Because Roboticia robots are Poppy compatible, it could also works with Poppy robots. You can find a SD card image for RPI3 with Djangoticia already installed [here](http://www.roboticia.com/?page_id=258).
+Anyway, Djangoticia can work (without all functionalities) on other systems like windows. It can also drive simulated robots on [VREP](http://www.coppeliarobotics.com/).**
 
 ## Installation
 
 * Download this repository. And extract it.
 
 * Install the dependencies ([Django](https://www.djangoproject.com/), [wifi](https://wifi.readthedocs.io/en/latest/), [psutil](http://pythonhosted.org/psutil/), [Jupyter](http://jupyter.readthedocs.io/en/latest/install.html) and [requests](http://docs.python-requests.org/en/master/)).
- You also need to have at least one robot installed (for example : [Roboticia-first](https://pypi.python.org/pypi/roboticia-first/)) : via
+ You also need to have at least one robot installed (for example : [Roboticia-first](https://pypi.python.org/pypi/roboticia-first/)) via :
 
 ```bash
 pip install -r requirements.txt
@@ -31,6 +31,6 @@ For all questions or requests for support, please use the [poppy forum.](https:/
 
 
 <p align="center>
-  <i>powered by <a href="https://www.poppy-project.org/en/">poppy project</a></i>
+  powered by <a href="https://www.poppy-project.org/en/">poppy project</a>
 </p>
 
