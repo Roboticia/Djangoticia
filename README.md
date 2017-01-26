@@ -1,6 +1,6 @@
 # Djangoticia: a Control Web Interface for Roboticia and Poppy robots. Based on Django.
 
-**Warning: Djangoticia is mainly intended to work on a Raspberry-Pi to work with Roboticia robots. Because Roboticia robots are Poppy compatible, it could also works with Poppy robots. You can find a SD card image for RPI3 with Djangoticia already installed [here](http://www.roboticia.com/?page_id=258).
+**Warning : Djangoticia is mainly intended to work on a Raspberry-Pi to work with Roboticia robots. Because Roboticia robots are Poppy compatible, it could also works with Poppy robots. You can find a SD card image for RPI3 with Djangoticia already installed [here](http://www.roboticia.com/?page_id=258).
 Anyway, Djangoticia can work (without all functionalities) on other systems like windows. It can also drive simulated robots on [VREP](http://www.coppeliarobotics.com/).**
 
 ## Installation
@@ -26,11 +26,9 @@ It will start the test webserver on 0.0.0.0 and use the default port 8000. So, y
 
 ![Homepage of the Web Interface](djangoticia01.jpg)
 
-**Warning: This will run a test server. To serve the page in production mode, you have to use a web server in addition of Django. Apache and mod_wsgi is a possibility. Configuration of production mode really depends on your system and need some skills in webserver management. Here is the [documentation](https://docs.djangoproject.com/en/1.10/howto/deployment/wsgi/modwsgi/).
+**Warning : This will run the Django test server. To serve the pages in production mode, you have to use a web server in addition of Django. Apache and mod_wsgi is a possibility. Configuration of production mode really depends on your system and need some skills in webserver management. Here is the [documentation](https://docs.djangoproject.com/en/1.10/howto/deployment/wsgi/modwsgi/).
 For all questions or requests for support, please use the [poppy forum.](https://forum.poppy-project.org/)**
 
 
-<p align="center>
-  powered by <a href="https://www.poppy-project.org/en/">poppy project</a>
-</p>
 
+*Powered by [poppy project](https://www.poppy-project.org/en/)*
