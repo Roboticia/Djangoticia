@@ -18,7 +18,7 @@ from .wpa_wifi import Network, Fileconf
 robot = Robot.objects.get(alive=True)
 server_snap = Server('snap',robot)
 server_jupyter = Server('jupyter',robot, simulator='no')
-server_rest = Server('http',robot,simulator='no')
+server_rest = Server('http',robot,simulator='vrep')
 context = {'info' : Info.objects.get(), 'robot' : robot ,  'url_for_index' : '/'}
 
 def index(request):
@@ -171,8 +171,9 @@ def rawlogs(request):
     
     
 def reboot(request):
-    try : 
-        subprocess.call(['sudo', 'reboot'])
+    try :
+        command = '(sleep 1 ; sudo reboot) &'
+        subprocess.call(command, shell=True)
     except :
     # return on fail (windows)
         pass
@@ -187,22 +188,3 @@ def shutdown(request):
     return HttpResponseRedirect('/')    
 
 
-def juju(request):
-    wifi_ssid = request.POST.get('wifi_ssid',False)    
-    context2 = {'scheme' : request.scheme, 'host' : request.get_host(), 'path' : request.path, 'full' : request.get_full_path(), 'get' : request.GET, 'post' : request.POST, 'wifi_ssid' : wifi_ssid }
-    context.update({'ip' : find_local_ip(),'hostname' : socket.gethostname(), 'wifi' : [{ 'ssid' : 'reseau test' , 'quality' : '0/70' , 'encrypted' : 'sécurisé' },{ 'ssid' : 'reseau test2' , 'quality' : '0/70' , 'encrypted' : 'sécurisé' }],  'conf' : [{'ssid' : 'reseau test', 'opts' : {'priority' : '1'}},], 'connect' : 'reseau test' })
-    context.update({ 'message' : False})
-    server_rest.start()
-    test=''
-    for i in range(100):
-        test+=server_rest.state()
-        time.sleep(0.1)
-    context.update({ 'test' : test})
-    return render(request, 'app1/juju.html', context2)
-
-def juju2(request):
-    rest = request.GET.get('rest','rien')
-    
-    context2 = {'scheme' : request.scheme, 'host' : request.get_host(), 'path' : request.path, 'full' : request.get_full_path(), 'get' : request.GET, 'post' : request.POST,'rest' : rest }
-    
-    return render(request, 'app1/juju.html', context2)
