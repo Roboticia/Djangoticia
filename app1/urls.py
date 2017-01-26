@@ -18,6 +18,4 @@ urlpatterns = [
 	url(r'^logs/$', views.logs, name='logs'),
 	url(r'^logs/raw/$', views.rawlogs, name='rawlogs'),
 	url(r'^shutdown/', views.shutdown, name='shutdown'),
-	url(r'^juju/', views.juju, name='juju'),
-	url(r'^juju2/', views.juju2, name='juju2'),
 ]
