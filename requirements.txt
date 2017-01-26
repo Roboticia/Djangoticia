@@ -1,0 +1,6 @@
+Django
+requests
+psutil
+wifi
+jupyter
+roboticia-first
