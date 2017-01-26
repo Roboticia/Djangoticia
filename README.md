@@ -8,7 +8,7 @@ Anyway, Djangoticia can work (without all functionalities) on other systems like
 * Download this repository. And extract it.
 
 * Install the dependencies ([Django](https://www.djangoproject.com/), [wifi](https://wifi.readthedocs.io/en/latest/), [psutil](http://pythonhosted.org/psutil/), [Jupyter](http://jupyter.readthedocs.io/en/latest/install.html) and [requests](http://docs.python-requests.org/en/master/)).
- You also need to have at least one robot installed (for example : [Roboticia-first](https://pypi.python.org/pypi/roboticia-first/)) via :
+ You also need to have at least one robot installed (for example : [Roboticia-first](https://github.com/Roboticia/Roboticia-first)) via :
 
 ```bash
 pip install -r requirements.txt
