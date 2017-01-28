@@ -65,7 +65,7 @@ def robot_logs(robot):
         raw += '<p>'+daemon.log+'</p>'
         if daemon.logfile!='none':
             with open(os.path.join(settings.LOG_ROOT, daemon.logfile+
-            daemon.type+'_'+robot.creature+'.log'), 'r') as log:
+            daemon.type+'_'+robot.creature+'_'+robot.type+'.log'), 'r') as log:
                 u = log.readlines()
             raw += '<p>Details : </p>'
             for l in u : 
@@ -77,9 +77,9 @@ def robot_logs(robot):
     return raw
 
 class Server(object):
-    def __init__(self, type, robot, simulator='no'):
+    def __init__(self, type, robot):
         self.robot = robot
-        self.daemon = Daemon.objects.get(type=type, simulator=simulator )
+        self.daemon = Daemon.objects.get(type=type)
 
     def get_command(self):
         if self.daemon.type == 'jupyter':
@@ -102,8 +102,8 @@ class Server(object):
         if not self.robot.camera:
             cmd += ['--disable-camera']
 
-        if not 'no' in self.daemon.simulator:
-            cmd += ['--'+self.daemon.simulator]
+        if not 'R' in self.robot.type:
+            cmd += ['--'+self.robot.get_type_display()]
 
         return cmd
 
@@ -121,7 +121,7 @@ class Server(object):
                 p = Popen(self.get_command(), stdout=FNULL, stderr=STDOUT)
             else :
                 with open(os.path.join(settings.LOG_ROOT, self.daemon.logfile+
-                self.daemon.type+'_'+self.robot.creature+'.log'), 'w') as log:
+                self.daemon.type+'_'+self.robot.creature+'_'+self.robot.type+'.log'), 'w') as log:
                     p = Popen(self.get_command(), stdout=log, stderr=STDOUT)
             self.daemon.pid = p.pid
             self.daemon.log += (  '{} : Daemon is now running with pid {}<br>'.

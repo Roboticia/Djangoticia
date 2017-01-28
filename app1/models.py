@@ -12,6 +12,11 @@ class Robot(models.Model):
     creature = models.CharField(max_length=200)
     camera = models.BooleanField(default=True)
     alive = models.BooleanField(default=False)
+    TYPE_CHOICES = (
+        ('V', 'vrep'),
+        ('S', 'poppy-simu'),
+        ('R', 'real robot'))
+    type = models.CharField(max_length=1, choices=TYPE_CHOICES, default='R')
     def __str__(self):
         return self.creature
 
@@ -27,9 +32,8 @@ class Info(models.Model):
 @python_2_unicode_compatible  # only if you need to support Python 2
 class Daemon(models.Model):
     type = models.CharField(max_length=20, default = 'http')
-    simulator = models.CharField(max_length=20, default = 'no')
     pid = models.SmallIntegerField(default=-1)
-    log = models.TextField(default='')
+    log = models.TextField(default='none')
     logfile = models.CharField(max_length=20, default = 'none')
     def __str__(self):
-        return 'Server {} on pid {} ({})'.format(self.type, self.pid, 'real robot' if self.simulator=='no' else self.simulator)
+        return 'Server {} on pid {}'.format(self.type, self.pid)

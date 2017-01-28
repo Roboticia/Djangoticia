@@ -14,6 +14,8 @@ Anyway, Djangoticia can work (without all functionalities) on other systems like
 pip install -r requirements.txt
 ```
 
+**Warning : Djangoticia plugs its command on Pypot (a dependency of Roboticia-first). If you experiment difficulties to install Pypot(http://github.com/poppy-project/pypot), the best choice is to take a scientific Python distribution with all onboard like : [anaconda](http://www.continuum.io/downloads).**
+
 ## Usage
 
 To start the web interface, simply run the *manage.py* script:
@@ -22,7 +24,7 @@ To start the web interface, simply run the *manage.py* script:
 python manage.py runserver
 ```
 
-It will start the test webserver on 0.0.0.0 and use the default port 8000. So, you can now connect to http://localhost:8000 and see this:
+It will start the test webserver on localhost and use the default port 8000. So, you can now connect to http://localhost:8000 and see this:
 
 ![Homepage of the Web Interface](djangoticia01.jpg)
 

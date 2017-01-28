@@ -14,27 +14,33 @@ from .wpa_wifi import Network, Fileconf
 
 # Create your views here.
 
+
 # Load the context for all the views here :
-robot = Robot.objects.get(alive=True)
-server_snap = Server('snap',robot)
-server_jupyter = Server('jupyter',robot, simulator='no')
-server_rest = Server('http',robot,simulator='no')
-context = {'info' : Info.objects.get(), 'robot' : robot ,  'url_for_index' : '/'}
+context = {'valid' : False}
+def start():
+    robot = Robot.objects.get(alive=True)
+    context['server_snap'] = Server('snap',robot)
+    context['server_jupyter'] = Server('jupyter',robot)
+    context['server_rest'] = Server('http',robot)
+    context.update({'info' : Info.objects.get(), 'robot' : robot ,  'url_for_index' : '/','valid' : True})
+    
 
 def index(request):
+    if not context['valid'] : start()
+    # Adding new context specific to the view here :
     rest = request.GET.get('rest',False)
     if rest=='stop' : 
-        server_rest.stop()
+        context['server_rest'].stop()
         context.update({ 'url_for_index' :  '/'})
-    server_snap.stop()
-    server_jupyter.stop()
+    context['server_snap'].stop()
+    context['server_jupyter'].stop()
     context.update({ 'message' : None})
     return render(request, 'app1/index.html',context)
 
 def snap(request):
     # Adding new context specific to the view here :
-    server_jupyter.stop()
-    server_snap.start()
+    context['server_jupyter'].stop()
+    context['server_snap'].start()
     for i in range(10):
         if check_url('http://localhost:6969') : 
             break
@@ -45,8 +51,8 @@ def snap(request):
     
 def jupyter(request):
     # Adding new context specific to the view here :
-    server_snap.stop()
-    server_jupyter.start()
+    context['server_snap'].stop()
+    context['server_jupyter'].start()
     for i in range(10):
         if check_url('http://localhost:8888') : 
             break
@@ -56,30 +62,30 @@ def jupyter(request):
     return render(request, 'app1/base-iframe.html', context)
     
 def monitor(request):
-    server_rest.start()
+    context['server_rest'].start()
     for i in range(10):
         if check_url('http://localhost:8080') : 
             break
         time.sleep(1)
-    iframe_src = '/static/monitor/'+robot.brand.lower()+'-'+robot.creature.lower()+'.html'
+    iframe_src = '/static/monitor/'+context['robot'].brand.lower()+'-'+context['robot'].creature.lower()+'.html'
     context.update({'iframe_src' : iframe_src, 'url_for_index' : '/?rest=stop' })
     return render(request, 'app1/base-iframe.html', context)
     
 def rest(request):
     rest_action = request.POST.get('rest_action',False)
-    if rest_action=='stop': server_rest.stop()
-    else : server_rest.start()
+    if rest_action=='stop': context['server_rest'].stop()
+    else : context['server_rest'].start()
     context.update({ 'logs_rest' : '/rest/raw/', 'url_rest' : '/rest/state/'})
     return render(request, 'app1/rest.html', context)
     
 def rest_state(request):
-    return HttpResponse(server_rest.state())
+    return HttpResponse(context['server_rest'].state())
     
 def rest_raw(request):
     raw=''
-    if server_rest.daemon.pid==-1 : return HttpResponse(raw)
-    with open(os.path.join(settings.LOG_ROOT, server_rest.daemon.logfile+
-    server_rest.daemon.type+'_'+robot.creature+'.log'), 'r') as log:
+    if context['server_rest'].daemon.pid==-1 : return HttpResponse(raw)
+    with open(os.path.join(settings.LOG_ROOT, context['server_rest'].daemon.logfile+
+    context['server_rest'].daemon.type+'_'+context['robot'].creature+'_'+context['robot'].type+'.log'), 'r') as log:
         u = log.readlines()
     for l in u : 
         try : 
@@ -157,14 +163,14 @@ def wifi_restart(request):
     return HttpResponseRedirect('/settings')   
     
 def logs(request):
-    snap = server_snap.state() 
-    jupyter = server_jupyter.state()
-    rest = server_rest.state() 
+    snap = context['server_snap'].state() 
+    jupyter = context['server_jupyter'].state()
+    rest = context['server_rest'].state() 
     context.update({'url_logs' : '/logs/raw/', 'snap' : snap, 'jupyter' : jupyter, 'rest' : rest}) 
     return render(request, 'app1/logs.html', context)
      
 def rawlogs(request):
-    raw = robot_logs(robot)
+    raw = robot_logs(context['robot'])
     return HttpResponse(raw)
             
     
