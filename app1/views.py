@@ -45,7 +45,7 @@ def snap(request):
         if check_url('http://localhost:6969') : 
             break
         time.sleep(1)
-    iframe_src = '/static/snap/snap.html#open:http://'+find_local_ip()+':6969/snap-blocks.xml'
+    iframe_src = '/static/snap/snap.html#open:http://'+socket.gethostname()+'.local:6969/snap-blocks.xml'
     context.update({'iframe_src' : iframe_src })
     return render(request, 'app1/base-iframe.html', context)
     
@@ -57,7 +57,7 @@ def jupyter(request):
         if check_url('http://localhost:8888') : 
             break
         time.sleep(1)
-    iframe_src = 'http://{}:8888'.format(find_local_ip())
+    iframe_src = 'http://{}.local:8888'.format(socket.gethostname())
     context.update({'iframe_src' : iframe_src })
     return render(request, 'app1/base-iframe.html', context)
     

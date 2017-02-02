@@ -87,7 +87,7 @@ class Server(object):
             'jupyter',
             'notebook',
             '--no-browser',
-            '--ip=0.0.0.0',
+            '--ip=*',
             '--notebook-dir={}'.format(settings.PYTHON_ROOT),
             '--config={}'.format(os.path.join(settings.BASE_DIR, 'jupyter','jupyter_notebook_config.py')),
             ]
