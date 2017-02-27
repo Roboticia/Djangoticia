@@ -88,6 +88,8 @@ class Fileconf(object):
         if 'psk' in opts : 
             if not re.match('[A-Za-z0-9@#$%^&+=]{8,}', opts['psk']) : return (False, 'psk')
             else : opts['psk'] = '"'+opts['psk']+'"'
+        else :
+            opts['key_mgmt']= "NONE"
         self.network_list.append(Network(ssid, **opts))
         return (True, 'ok')
         
@@ -108,7 +110,7 @@ class Fileconf(object):
         for line in self.head :
             new_config+= line
             new_config+= '\n'
-        new_config+= '\n'
+        #new_config+= '\n'
         for net in self.network_list :
             new_config+=repr(net)
             new_config+= '\n\n'

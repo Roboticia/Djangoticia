@@ -98,13 +98,17 @@ def rest_raw(request):
     
     
 def configuration(request):
+    try:
+        connect = subprocess.check_output(['iwgetid', '-r'])
+    except :
+        connect = 'none'
+        pass
     try : 
     # works only on linux system
         wifi = list(Cell.all('wlan0'))
         conf = Fileconf.from_file('/etc/wpa_supplicant/wpa_supplicant.conf')
-        connect = subprocess.check_output(['iwgetid', '-r'])
     except :
-    # give fake values on wondows platform
+    # give fake values on windows platform
         context.update({'ip' : find_local_ip(),'hostname' : socket.gethostname(), 
         'wifi' : [{ 'ssid' : 'test network' , 'quality' : '0/70' , 'encrypted' : 'secure' },{ 'ssid' : 'reseau test2' , 'quality' : '0/70' , 'encrypted' : 'secure' }],  'conf' : [{'ssid' : 'reseau test', 'opts' : {'priority' : '1'}},{'ssid' : 'reseau test2', 'opts' : {'priority' : '5'}},], 'connect' : 'reseau test' })
         pass
@@ -119,7 +123,7 @@ def wifi_add(request):
     # works only on linux system
         conf = Fileconf.from_file('/etc/wpa_supplicant/wpa_supplicant.conf')
     except :
-    # give fake values on wondows platform
+    # give fake values on windows platform
         pass
         return HttpResponseRedirect('/settings')
     wifi_ssid = request.POST['wifi_ssid']

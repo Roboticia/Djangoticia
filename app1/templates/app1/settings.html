@@ -83,6 +83,9 @@
 					</form>
 				
 				{% endfor %}
+				{% else %}
+			<p>No network configured</p>
+			{% endif %}
 				</div>
 		   <div class="callout primary">
 		   <p>Add wifi : </p>
@@ -138,9 +141,7 @@
 			  </div>
 	  
 				
-			{% else %}
-			<p>Wifi unsupported on used platform</p>
-			{% endif %}
+			
 			
           </div>
         </div>
