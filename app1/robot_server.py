@@ -164,6 +164,6 @@ class Server(object):
     def state(self):
         if psutil.pid_exists(self.daemon.pid):
             p = psutil.Process(self.daemon.pid)
-            return 'Robot daemon is {}.'.format('running' if not p.status()=='zombie' else'stopped')
+            return 'Robot daemon is {}.'.format('stopped' if p.status()=='zombie' else 'running' )
         else :
             return 'Robot daemon is stopped.'

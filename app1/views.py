@@ -15,8 +15,13 @@ from .wpa_wifi import Network, Fileconf
 # Create your views here.
 
 
-# Load the context for all the views here :
-context = {'valid' : False}
+#create context the first time
+try :
+    context
+except NameError :
+    context = {'valid' : False}
+
+#function to load the global context    
 def start():
     robot = Robot.objects.get(alive=True)
     context['server_snap'] = Server('snap',robot)
@@ -28,7 +33,7 @@ def start():
 def index(request):
     if not context['valid'] : start()
     # Adding new context specific to the view here :
-    rest = request.GET.get('rest',False)
+    rest = request.GET.get('rest','go')
     if rest=='stop' : 
         context['server_rest'].stop()
         context.update({ 'url_for_index' :  '/'})
@@ -41,7 +46,7 @@ def snap(request):
     # Adding new context specific to the view here :
     context['server_jupyter'].stop()
     context['server_snap'].start()
-    for i in range(10):
+    for i in range(20):
         if check_url('http://localhost:6969') : 
             break
         time.sleep(1)
@@ -67,7 +72,7 @@ def monitor(request):
         if check_url('http://localhost:8080') : 
             break
         time.sleep(1)
-    iframe_src = '/static/monitor/'+context['robot'].brand.lower()+'-'+context['robot'].creature.lower()+'.html'
+    iframe_src = '/static/monitor/'+context['robot'].brand.lower()+'-'+context['robot'].creature.lower()+'.html#open=http://'+find_local_ip()+':8080'
     context.update({'iframe_src' : iframe_src, 'url_for_index' : '/?rest=stop' })
     return render(request, 'app1/base-iframe.html', context)
     
