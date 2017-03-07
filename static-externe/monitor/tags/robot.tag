@@ -30,7 +30,7 @@
 <robot_title>
   <h2>
     <span class="pull-right">
-      <i class="fa {connected ? 'fa-link text-success':'fa-chain-broken text-danger'}" title="{connected ? 'Connected' : 'Disconnected'} - Click to édit url " onclick="{toggle_url}"></i>
+      <i class="fa {connected ? 'fa-link text-success':'fa-chain-broken text-danger'}" title="{connected ? 'Connected' : 'Disconnected'} - Click to edit url " onclick="{toggle_url}"></i>
       <span if="{connected}">
         <i if="{compliant}" class="fa fa-bed" title="All motors are compliant"></i>
         <span class="temperature {hot:hot} {ardent:ardent}" title="Hottest motor at {maxTemp}°C">
@@ -62,10 +62,15 @@
 
     self.change_url = function(e){
       if (e.keyCode == 13) {
+	    Poppy.url = document.getElementById('poppy_url').value;
+		sessionStorage.setItem("poppy_url",Poppy.url);
+		Poppy.getRobot();
         self._url_open = false;
-      }
-      Poppy.url = document.getElementById('poppy_url').value;
-      sessionStorage.setItem("poppy_url",Poppy.url);
+	  } else {
+	    Poppy.url = document.getElementById('poppy_url').value;
+		sessionStorage.setItem("poppy_url",Poppy.url);
+		Poppy.getRobot();
+	  }
     };
 
     Poppy.on("poppy.robot.updated", function(robot) {
