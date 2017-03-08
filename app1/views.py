@@ -20,6 +20,9 @@ try :
     context
 except NameError :
     context = {'valid' : False}
+    
+def check_context():
+    if not context['valid'] : start()
 
 #function to load the global context    
 def start():
@@ -31,7 +34,7 @@ def start():
     
 
 def index(request):
-    if not context['valid'] : start()
+    check_context()
     # Adding new context specific to the view here :
     rest = request.GET.get('rest','go')
     if rest=='stop' : 
@@ -43,6 +46,7 @@ def index(request):
     return render(request, 'app1/index.html',context)
 
 def snap(request):
+    check_context()
     # Adding new context specific to the view here :
     context['server_jupyter'].stop()
     context['server_snap'].start()
@@ -55,6 +59,7 @@ def snap(request):
     return render(request, 'app1/base-iframe.html', context)
     
 def jupyter(request):
+    check_context()
     # Adding new context specific to the view here :
     context['server_snap'].stop()
     context['server_jupyter'].start()
@@ -67,6 +72,7 @@ def jupyter(request):
     return render(request, 'app1/base-iframe.html', context)
     
 def monitor(request):
+    check_context()
     context['server_rest'].start()
     for i in range(10):
         if check_url('http://localhost:8080') : 
@@ -77,6 +83,7 @@ def monitor(request):
     return render(request, 'app1/base-iframe.html', context)
     
 def rest(request):
+    check_context()
     rest_action = request.POST.get('rest_action',False)
     if rest_action=='stop': context['server_rest'].stop()
     else : context['server_rest'].start()
@@ -103,6 +110,7 @@ def rest_raw(request):
     
     
 def configuration(request):
+    check_context()
     try:
         connect = subprocess.check_output(['iwgetid', '-r'])
     except :
@@ -172,6 +180,7 @@ def wifi_restart(request):
     return HttpResponseRedirect('/settings')   
     
 def logs(request):
+    check_context()
     snap = context['server_snap'].state() 
     jupyter = context['server_jupyter'].state()
     rest = context['server_rest'].state() 
