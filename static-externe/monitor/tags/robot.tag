@@ -40,7 +40,7 @@
     </span>
     <img src="img/monitor.png" style="height:1em;"/> Monitoring Robot
   </h2>
-  <input id="poppy_url" if="{_url_open}" type="text"  value="{url}"  style="width:100%"/>
+  <input id="poppy_url" if="{_url_open}" type="text"  value="{url}" disabled="disabled" style="width:100%"/>
   <script>
     "use strict";
     var self = this;
