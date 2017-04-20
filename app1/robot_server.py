@@ -142,9 +142,14 @@ class Server(object):
                 p.kill()
             except psutil.NoSuchProcess:
                 pass
-            time.sleep(1)
             
-            if 'stopped' in self.state() and not check_url('http://localhost:8888') :
+            t0 = time.time()
+            while check_url('http://localhost:8080'):
+                time.sleep(0.5)
+                t = time.time() - t0
+                if t>5 : break
+            
+            if 'stopped' in self.state() and not check_url('http://localhost:8080') :
                 self.daemon.pid = -1
                 self.daemon.log = ''
                 self.daemon.save()
