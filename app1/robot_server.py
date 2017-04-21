@@ -88,6 +88,7 @@ class Server(object):
             'notebook',
             '--no-browser',
             '--ip=*',
+            '--port=8989',
             '--notebook-dir={}'.format(settings.PYTHON_ROOT),
             '--config={}'.format(os.path.join(settings.BASE_DIR, 'jupyter','jupyter_notebook_config.py')),
             ]
@@ -107,7 +108,7 @@ class Server(object):
 
         return cmd
 
-    def start(self):
+    def start(self, get = False):
         if 'running' in self.state():
             self.daemon.log += (  '{} : pidfile {} already exist. '
                               'Daemon already running.<br>'.format(time.strftime(
@@ -127,9 +128,18 @@ class Server(object):
             self.daemon.log += (  '{} : Daemon is now running with pid {}<br>'.
             format(time.strftime("%y/%m/%d %H:%M", time.localtime()),self.daemon.pid))
             self.daemon.save()
+        
+            if get == 'token' :
+                token = 1
+                from notebook import notebookapp
+                token_list = list(notebookapp.list_running_servers())
+                for t in token_list :
+                    if t['port']==8989 : token = t['token'] 
+                return token
+            
             return True
 
-    def stop(self):
+    def stop(self, port=0):
         if 'running' in self.state():
             try:
                 p = psutil.Process(self.daemon.pid)
@@ -143,13 +153,12 @@ class Server(object):
             except psutil.NoSuchProcess:
                 pass
             
-            t0 = time.time()
-            while check_url('http://localhost:8080'):
-                time.sleep(0.5)
-                t = time.time() - t0
-                if t>5 : break
+            for i in range(5):
+                if 'stopped' in self.state() :
+                    break
+                time.sleep(1)
             
-            if 'stopped' in self.state() and not check_url('http://localhost:8080') :
+            if 'stopped' in self.state() and not check_url('http://localhost:'+str(port)) :
                 self.daemon.pid = -1
                 self.daemon.log = ''
                 self.daemon.save()

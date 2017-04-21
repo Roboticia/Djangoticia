@@ -41,20 +41,20 @@ def index(request):
         context['server_rest'].stop()
         context.update({ 'url_for_index' :  '/'})
     context['server_snap'].stop()
-    context['server_jupyter'].stop()
+    context['server_jupyter'].stop(8989)
     context.update({ 'message' : None})
     return render(request, 'app1/index.html',context)
 
 def snap(request):
     check_context()
     # Adding new context specific to the view here :
-    context['server_jupyter'].stop()
+    context['server_jupyter'].stop(8989')
     context['server_snap'].start()
     for i in range(20):
         if check_url('http://localhost:6969') : 
             break
         time.sleep(1)
-    iframe_src = '/static/snap/snap.html#open:http://'+socket.gethostname()+'.local:6969/snap-blocks.xml'
+    iframe_src = '/static/snap/snap.html#open:http://'+find_local_ip()+':6969/snap-blocks.xml'
     context.update({'iframe_src' : iframe_src })
     return render(request, 'app1/base-iframe.html', context)
     
@@ -62,12 +62,12 @@ def jupyter(request):
     check_context()
     # Adding new context specific to the view here :
     context['server_snap'].stop()
-    context['server_jupyter'].start()
+    token = context['server_jupyter'].start(get='token')
     for i in range(10):
-        if check_url('http://localhost:8888') : 
+        if check_url('http://localhost:8989') : 
             break
         time.sleep(1)
-    iframe_src = 'http://{}.local:8888'.format(socket.gethostname())
+    iframe_src = 'http://{}.local:8989?token={}'.format(find_local_ip(),token)
     context.update({'iframe_src' : iframe_src })
     return render(request, 'app1/base-iframe.html', context)
     
