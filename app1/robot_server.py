@@ -131,7 +131,6 @@ class Server(object):
         
             if get == 'token' :
                 import re
-                token = [False]
                 with open(os.path.join(settings.LOG_ROOT, self.daemon.logfile+
                 self.daemon.type+'_'+self.robot.creature+'_'+self.robot.type+'.log'), 'r') as tok:
                     for i in range(10):
@@ -144,11 +143,12 @@ class Server(object):
                 #token_list = list(notebookapp.list_running_servers())
                 #for t in token_list :
                 #    if t['pid']==p.pid : token = t['token'] 
+                if not token : token = [0]
                 return token[0]
             
             return True
 
-    def stop(self, port=0):
+    def stop(self, port=9999):
         if 'running' in self.state():
             try:
                 p = psutil.Process(self.daemon.pid)
