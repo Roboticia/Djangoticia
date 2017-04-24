@@ -130,12 +130,21 @@ class Server(object):
             self.daemon.save()
         
             if get == 'token' :
-                token = 1
-                from notebook import notebookapp
-                token_list = list(notebookapp.list_running_servers())
-                for t in token_list :
-                    if t['port']==8989 : token = t['token'] 
-                return token
+                import re
+                token = [False]
+                with open(os.path.join(settings.LOG_ROOT, self.daemon.logfile+
+                self.daemon.type+'_'+self.robot.creature+'_'+self.robot.type+'.log'), 'r') as tok:
+                    for i in range(10):
+                        log_token = tok.read()
+                        token = re.findall('token=(.*)',log_token)
+                        if len(token)>1 : break
+                        time.sleep(1)
+                    
+                #from notebook import notebookapp
+                #token_list = list(notebookapp.list_running_servers())
+                #for t in token_list :
+                #    if t['pid']==p.pid : token = t['token'] 
+                return token[0]
             
             return True
 
@@ -146,18 +155,18 @@ class Server(object):
             except psutil.NoSuchProcess:
                 return
             p_children = p.children(recursive=True)
-            for process in p_children:
+            for process in reversed(p_children):
                 process.kill()
             try :
                 p.kill()
-            except psutil.NoSuchProcess:
+            except psutil.NoSuchProcess :
                 pass
             
             for i in range(5):
                 if 'stopped' in self.state() :
                     break
                 time.sleep(1)
-            
+                
             if 'stopped' in self.state() and not check_url('http://localhost:'+str(port)) :
                 self.daemon.pid = -1
                 self.daemon.log = ''

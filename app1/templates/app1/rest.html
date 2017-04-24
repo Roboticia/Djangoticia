@@ -10,7 +10,7 @@
 
 <div class="row">
   <div class="large-12 columns">
-    <h3> Etat du serveur :  </h3>
+    <h3> Server state :  </h3>
 	
 	<div class="row">
 	<div class="large-9 columns">
@@ -18,7 +18,7 @@
 	</div>
 	<div class="large-3 columns">
 	<form action="/rest/" method="post"><input type='hidden' name='rest_action' value='stop' />{% csrf_token %}
-	<button type = "submit" id="stop-rest" type="button" class="button">Stopper le serveur</button>
+	<button type = "submit" id="stop-rest" type="button" class="button">Stop the server</button>
 	</form>
 	</div>
 	</div>
@@ -35,7 +35,7 @@
 
 <div class="row">
   <div class="large-12 columns">
-  <h3> Détail des logs : </h3>
+  <h3> Logs details : </h3>
     <pre>
       <code id="robot-logs" class="accesslog hljs"></code>
     </pre>

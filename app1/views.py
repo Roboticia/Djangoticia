@@ -48,7 +48,7 @@ def index(request):
 def snap(request):
     check_context()
     # Adding new context specific to the view here :
-    context['server_jupyter'].stop(8989')
+    context['server_jupyter'].stop(8989)
     context['server_snap'].start()
     for i in range(20):
         if check_url('http://localhost:6969') : 
@@ -67,7 +67,7 @@ def jupyter(request):
         if check_url('http://localhost:8989') : 
             break
         time.sleep(1)
-    iframe_src = 'http://{}.local:8989?token={}'.format(find_local_ip(),token)
+    iframe_src = 'http://{}:8989/?token={}'.format(find_local_ip(),token)
     context.update({'iframe_src' : iframe_src })
     return render(request, 'app1/base-iframe.html', context)
     
