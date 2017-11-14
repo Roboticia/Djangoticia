@@ -15,5 +15,3 @@ chmod 775 /var/www/
 chmod 664 ./db.sqlite3
 chmod 775 ./my_python/
 chmod 775 /
-
-sudo usermod -a -G dialout www-data

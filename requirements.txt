@@ -1,6 +1,10 @@
 Django
 requests
 psutil
-wifi
+wifi-roboticia
 jupyter
 roboticia-first
+roboticia-quattro
+roboticia-uno
+roboticia-drive
+roboticia-move

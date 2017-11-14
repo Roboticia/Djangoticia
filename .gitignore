@@ -1,6 +1,7 @@
-*.log
 *.pyc
 *_no_git_*
 *.ipynb*
+static_root/
+
 
 
