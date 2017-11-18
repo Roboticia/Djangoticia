@@ -4,7 +4,7 @@ import os
 import time
 import socket
 import subprocess
-from wifi-roboticia import Cell
+from wifi import Cell
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
