@@ -164,7 +164,7 @@ transform:scale(3) rotate(-90deg) translate(-10px,-10px);
 .poppy_picture{
   width:600px;
   height:650px;
-  background:transparent url(../img/roboticia-move.png) center center no-repeat;
+  background:transparent url(../img/roboticia-quattro.png) center center no-repeat;
   background-size:contain;
 }
 
