@@ -164,7 +164,7 @@ transform:scale(3) rotate(-90deg) translate(-10px,-10px);
 .poppy_picture{
   width:600px;
   height:650px;
-  background:transparent url(../img/roboticia-move.png) center center no-repeat;
+  background:transparent url(../img/roboticia-quattro.png) center center no-repeat;
   background-size:contain;
 }
 
@@ -200,8 +200,15 @@ li.motor.ardent {
   0% { box-shadow: 0 0 5px #600 ; }
   100% { box-shadow: 0 0 15px #600 ; }
 }
-#motor_m1{top:100px; left:530px;}
-#motor_m2{top:189px; left:530px;}
-#motor_m3{top:379px; left:494px;}
-#motor_m4{top:67px; left:204px;}
-#motor_m5{top:276px; left:356px;}
+#motor_m11{top:100px; left:530px;}
+#motor_m12{top:189px; left:530px;}
+#motor_m13{top:379px; left:494px;}
+#motor_m21{top:67px; left:204px;}
+#motor_m22{top:276px; left:356px;}
+#motor_m23{top:376px; left:363px;}
+#motor_m31{top:266px; left:226px;}
+#motor_m32{top:383px; left:222px;}
+#motor_m33{top:457px; left:215px;}
+#motor_m41{top:88px; left:48px;}
+#motor_m42{top:176px; left:37px;}
+#motor_m43{top:273px; left:16px;}
